@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One Source ID Card Generator</title>
+  <link rel="icon" href="tab.png" type="image/x-icon">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('bg.jpg');
+      background-size: cover;
+    }
+    .form-container {
+      max-width: 450px;
+      margin: auto;
+      background-color: #ffffff0c;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      color: #f6fa00;
+      font-family: 'Times New Roman', Times, serif;
+    }
+    input[type="text"], input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #fffbfb;
+      border-radius: 5px;
+    }
+    h2 {
+      text-align: center;
+      color: #ffe600;
+    }
+    .id-card, .id-card-back {
+      width: 2.125in;
+      height: 3.370in;
+      position: relative;
+      border: 2px solid #000;
+      border-radius: 10px;
+      display: none;
+      margin: 0;
+      page-break-inside: avoid;
+    }
+    .id-card {
+      background-image: url('idbg.png');
+      background-size: cover;
+      background-position: center;
+    }
+    .id-card-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 20px; /* Adjust gap between the cards as needed */
+      padding: 0;
+    }
+
+    .id-card .contact-info {
+      position: absolute;
+      top: 70px;
+      left: 10px;
+      right: 10px;
+      font-size: 7px;
+      text-align: center;
+      line-height: 1.2;
+      color: #000;
+    }
+    .id-card .logo {
+      position: absolute;
+      top: 10px;
+      left: 37px;
+      width: 135px;
+      height: 60px;
+      object-position: center;
+    }
+    .id-card .profile-pic {
+      position: absolute;
+      top: 113px;
+      left: 53px;
+      width: 1in;
+      height: 1in;
+      border: 2px solid #000;
+      object-fit: fill;
+    }
+    .id-card .barcode {
+      position: absolute;
+      top: 215px;
+      left: 24.5px;
+      width: 50px;
+      height: 10px;
+    }
+    .id-card .details {
+      position: absolute;
+      top: 260px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      color: #000000;
+      font-weight: bold;
+      font-family: 'Times New Roman', Times, serif;
+    }
+    .id-card .details .name {
+      font-size: 13px;
+      padding: 6px;
+      top: 290px;
+      background-color: #f6fa00;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+    }
+    .id-card .details .position {
+      font-size: 11px;
+    }
+    .id-card .details .employee-id {
+      font-size: 9px;
+      padding: 5px;
+    }
+    .id-card-back {
+      background-color: #ffff;
+      background-position: center;
+      margin-top: 20px;
+    }
+    .id-card-back .emergency-info {
+      font-size: 10.3px;
+      color: #000;
+      padding: 12px;
+      margin-top: 13px;
+    }
+    .id-card-back .signature {
+      font-size: 12px;
+      color: #000;
+      text-align: center;
+      padding: 10px;
+      position: absolute;
+      top: 45px;
+      left: 50px;
+      width: 90px;
+      height: 40px;
+      object-position: center;
+      margin-top: 25px;
+    }
+
+    .id-card-back .sign {
+      position: absolute;
+      top: 68%;
+      left: 65px;
+      width: 80px;
+      height: 50px;
+      object-position: center;
+    }
+    .id-card .profile-pic, .id-card .logo, .id-card-back .sign {
+      display: block; /* Ensure they are block elements */
+      margin-left: auto; /* Align left */
+      margin-right: auto; /* Align right */
+    }
+
+    p {
+      text-align: center;
+      font-size: 10px;
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+    h3 {
+      font-size: 10px;
+      text-align: center;
+      font-weight: bold;
+      color: #000;
+      font-family: 'calibri';
+    }
+    h4 {
+      font-size: 10px;
+      text-align: center;
+      font-weight: bold;
+      color: #000;
+      font-family: 'calibri';
+    }
+    .mam {
+      font-size: 10px;
+      text-align: center;
+      color: #000;
+      font-family: 'calibri';
+    }
+    .button-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .button {
+      padding: 10px 20px;
+      background-color: #f6fa00;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      color: #000;
+    }
+    @media print {
+      body {
+        margin: 0;
+      }
+      .id-card-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 20px; /* Adjust gap between the cards as needed */
+        padding: 0;
+        margin-top: 1in; /* Set distance from the top of the page */
+      }
+      .id-card, .id-card-back {
+        display: block;
+        position: relative;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        margin: 0; /* Ensure no extra margin is added */
+      }
+      .form-container, .button-container {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>ID Card Form</h2>
+    <form id="idForm">
+      <label for="name">Full Name:</label><br>
+      <input type="text" id="name" name="name" required><br><br>
+      
+      <label for="position">Position:</label><br>
+      <input type="text" id="position" name="position" required><br><br>
+
+      <label for="employeeId">Employee ID Number:</label><br>
+      <input type="text" id="employeeId" name="employeeId" required><br><br>
+
+      <label for="photo">1x1 Photo:</label><br>
+      <input type="file" id="photo" name="photo" accept="image/*" required><br><br>
+
+      <label for="emergencyName">Emergency Contact Name:</label><br>
+      <input type="text" id="emergencyName" name="emergencyName" required><br><br>
+
+      <label for="emergencyAddress">Emergency Contact Address:</label><br>
+      <input type="text" id="emergencyAddress" name="emergencyAddress" required><br><br>
+
+      <label for="emergencyContact">Emergency Contact Number:</label><br>
+      <input type="text" id="emergencyContact" name="emergencyContact" required><br><br>
+
+      <label for="signature">Employee Signature:</label><br>
+      <input type="file" id="signature" name="signature" accept="image/*" required><br><br>
+
+      <input type="submit" value="Generate ID Card">
+    </form>
+  </div>
+
+  <div class="id-card-container">
+    <div id="idCard" class="id-card">
+      <img id="logo" class="logo" src="" alt="Logo">
+      <img id="profilePic" class="profile-pic" alt="Profile Photo">
+      <div class="barcode">
+        <svg id="cardBarcode"></svg>
+      </div>
+      <div class="contact-info">
+        Blk 01 Lot 25 Grandriverstone Brgy. Dita, Sta. Rosa City, 4026 Laguna, Philippines<br>
+        Contact Nos. (049) 576-7028; (049) 576-7029<br>
+        (0998) 977-4625; (0917) 551-5946<br>
+        Website: www.onesourcemsgs.com
+      </div>
+      <div class="details">
+        <div class="name" id="cardName"></div>
+        <div class="position" id="cardPosition"></div>
+        <div class="employee-id" id="cardEmployeeId"></div>
+      </div>
+    </div>
+
+    <div id="idCardBack" class="id-card-back">
+      <div class="emergency-info">
+        <div style="text-align: center;">
+          <strong>In case of emergency, please notify:</strong>
+        </div>
+        <span id="backEmergencyName"></span> <br>
+        <span id="backEmergencyAddress"></span> <br>
+        <span id="backEmergencyContact"></span>
+        <br>
+        <img id="backSignature" class="signature" alt="Signature">
+      </div>
+      <br>
+      <br>
+      <h3>BEARER'S NAME AND SIGNATURE</h3>
+      <p>This card is a property of One Source GSI. & must be returned upon request. This may be revoked anytime even without notice. If found, please return to One Source GSI.</p>
+      <h4>Authorized Representative:</h4>
+      <br>
+      <img id="sign" class="sign" src="sig.png" alt="sign">
+      <div class="mam">
+        MARICAR S. SUAREZ<br>
+        President<br>
+      </div>
+    </div>
+  </div>
+
+  <div class="button-container">
+    <button class="button" onclick="printIDCard()">Print ID Card</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.0/JsBarcode.all.min.js"></script>
+  <script>
+    document.getElementById('idForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const position = document.getElementById('position').value;
+      const employeeId = document.getElementById('employeeId').value;
+      const photoInput = document.getElementById('photo');
+      const emergencyName = document.getElementById('emergencyName').value;
+      const emergencyAddress = document.getElementById('emergencyAddress').value;
+      const emergencyContact = document.getElementById('emergencyContact').value;
+      const signatureInput = document.getElementById('signature');
+
+      document.getElementById('cardName').textContent = name;
+      document.getElementById('cardPosition').textContent = position;
+      document.getElementById('cardEmployeeId').textContent = employeeId;
+
+      const logoSrc = 'logo.png';
+      document.getElementById('logo').src = logoSrc;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        document.getElementById('profilePic').src = event.target.result;
+      };
+      reader.readAsDataURL(photoInput.files[0]);
+
+      const readerSignature = new FileReader();
+      readerSignature.onload = function(event) {
+        document.getElementById('backSignature').src = event.target.result;
+      };
+      readerSignature.readAsDataURL(signatureInput.files[0]);
+
+      document.getElementById('backEmergencyName').textContent = 'Name: ' + emergencyName;
+      document.getElementById('backEmergencyAddress').textContent = 'Address: ' + emergencyAddress;
+      document.getElementById('backEmergencyContact').textContent = 'Contact: ' + emergencyContact;
+
+      JsBarcode("#cardBarcode", employeeId, {
+        format: "CODE128",
+        displayValue: false,
+        width: 1.2,
+        height: 28,
+        margin: 10
+      });
+
+      // Center the ID cards within the container
+      const container = document.querySelector('.id-card-container');
+      container.style.display = 'flex';
+      container.style.alignItems = 'center';
+      container.style.justifyContent = 'center';
+
+      document.getElementById('idCard').style.display = 'block';
+      document.getElementById('idCardBack').style.display = 'block';
+    });
+
+    function printIDCard() {
+      window.print();
+    }
+  </script>
+</body>
+</html>
